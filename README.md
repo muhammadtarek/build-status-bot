@@ -32,7 +32,6 @@ node index.js <repository-name> <changelog file path> <channel name> <slack OAut
 
 * [@slack/client](https://github.com/slackapi/node-slack-sdk/)
 * [chalk](https://github.com/chalk/chalk/)
-* [dotenv](https://github.com/motdotla/dotenv/)
 
 ## License
 
