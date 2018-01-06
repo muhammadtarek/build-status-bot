@@ -1,0 +1,4 @@
+CHANGELOG.md
+.env
+/node_modules
+*.log
