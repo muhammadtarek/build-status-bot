@@ -2,3 +2,4 @@
 .editorconfig
 .eslintrc
 *.log
+CHANGELOG.md
