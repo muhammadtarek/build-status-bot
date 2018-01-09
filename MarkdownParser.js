@@ -9,20 +9,23 @@ exports.getLastVersion = filePath => {
     .split('\n')
     .filter(Boolean);
 
-  let versionCounter = 0;
   let version;
+  let shouldRead = true;
   const versionPoints = [];
 
   // Looping through each line of CHANGELOG
   lines.forEach(line => {
     // Get the first version only
-    if (versionCounter === 2) return;
-
     if (line.indexOf('##') > -1) {
-      // If the line is second headline
-      versionCounter++;
-      version = line.replace('## ', '');
-    } else if (line.indexOf('*') > -1) {
+      if (!version) {
+        // If the line is second headline
+        version = line.replace('## ', '');
+      } else {
+        shouldRead = false;
+      }
+    }
+
+    if (line.indexOf('*') > -1 && shouldRead) {
       // If the line is a bullet point
       versionPoints.push(line.replace('* ', ''));
     }
