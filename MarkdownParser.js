@@ -9,18 +9,16 @@ exports.getLastVersion = filePath => {
     .split('\n')
     .filter(Boolean);
 
-  let versionCounter = 0;
   let version;
   const versionPoints = [];
 
   // Looping through each line of CHANGELOG
   lines.forEach(line => {
     // Get the first version only
-    if (versionCounter === 2) return;
+    if (version && versionPoints.length !== 0) return;
 
     if (line.indexOf('##') > -1) {
       // If the line is second headline
-      versionCounter++;
       version = line.replace('## ', '');
     } else if (line.indexOf('*') > -1) {
       // If the line is a bullet point
