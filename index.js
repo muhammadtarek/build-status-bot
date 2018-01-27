@@ -24,6 +24,12 @@ const optionDefinitions = [
     defaultValue: undefined
   },
   {
+    name: 'build-id',
+    alias: 'b',
+    type: String,
+    defaultValue: undefined
+  },
+  {
     name: 'path',
     alias: 'p',
     type: String,
@@ -52,6 +58,7 @@ const userOptions = commandLineArgs(optionDefinitions); // User options
 const packageName = userOptions['package-name'];
 let message = userOptions['message'];
 const server = userOptions['server'];
+const buildId = userOptions['build-id'];
 const packageChangelogPath = userOptions['path'];
 const channelName = userOptions['channel'];
 const slackOAuth = userOptions['auth'];
@@ -88,6 +95,15 @@ if (server) {
   attachments.attachments[0].fields.splice(2, 0, {
     title: 'Server',
     value: `\`${server}\``,
+    short: true
+  });
+}
+
+// Adding build id on VSTS
+if (buildId) {
+  attachments.attachments[0].fields.splice(3, 0, {
+    title: 'VSTS Build ID',
+    value: `\`${buildId}\``,
     short: true
   });
 }
