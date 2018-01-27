@@ -1,36 +1,61 @@
 const chalk = require('chalk');
 const { WebClient } = require('@slack/client');
+const commandLineArgs = require('command-line-args'); // Command args tokenizer
+const getUsage = require('command-line-usage'); // Command options help
 const markdownParser = require('./MarkdownParser');
 
-const args = process.argv.slice(2);
-let packageName;
-let packageChangelogPath;
-let channelName;
-let slackOAuth;
-let versionChangelog;
-let counter = 0;
-
-if (args.length < 3) {
-  console.log(chalk.red('You should enter package name and changelog file path'));
-  return;
-}
-
-// Assigning package name and changelog.md path
-args.forEach(arg => {
-  if (counter === 0) {
-    packageName = arg;
-  } else if (counter === 1) {
-    packageChangelogPath = arg;
-  } else if (counter === 2) {
-    channelName = arg;
-  } else {
-    slackOAuth = arg;
+const optionDefinitions = [
+  {
+    name: 'package-name',
+    alias: 'n',
+    type: String,
+    defaultOption: true
+  },
+  {
+    name: 'message',
+    alias: 'm',
+    type: String,
+    defaultValue: undefined
+  },
+  {
+    name: 'server',
+    alias: 's',
+    type: String,
+    defaultValue: undefined
+  },
+  {
+    name: 'path',
+    alias: 'p',
+    type: String,
+    defaultValue: 'CHANGELOG.md'
+  },
+  {
+    name: 'channel',
+    alias: 'c',
+    type: String
+  },
+  {
+    name: 'auth',
+    alias: 'a',
+    type: String
+  },
+  {
+    name: 'help',
+    alias: 'h',
+    type: Boolean,
+    lazyMultiple: false,
+    multiple: false
   }
-  counter++;
-});
+];
 
-// Getting last version changelog
-versionChangelog = markdownParser.getLastVersion(packageChangelogPath);
+const userOptions = commandLineArgs(optionDefinitions); // User options
+const packageName = userOptions['package-name'];
+let message = userOptions['message'];
+const server = userOptions['server'];
+const packageChangelogPath = userOptions['path'];
+const channelName = userOptions['channel'];
+const slackOAuth = userOptions['auth'];
+const versionChangelog = markdownParser.getLastVersion(packageChangelogPath);
 const bulletPoints = versionChangelog.versionPoints.map(point => `• ${point}`);
 const styledPoints = `${bulletPoints.join('\n')}`;
 const attachments = {
@@ -58,6 +83,20 @@ const attachments = {
   ]
 };
 
+// Adding server section
+if (server) {
+  attachments.attachments[0].fields.splice(2, 0, {
+    title: 'Server',
+    value: `\`${server}\``,
+    short: true
+  });
+}
+
+// Adding :tada: emoji before the message
+if (message) {
+  message = `:tada: ${message}`;
+}
+
 // Getting access token from slack.com
 const authUrl = 'https://slack.com/oauth/authorize';
 const token = process.env.SLACK_OAUTH_ACCESS_TOKEN || slackOAuth;
@@ -66,8 +105,8 @@ const channel = `#${channelName}`;
 
 // See: https://api.slack.com/methods/chat.postMessage
 client.chat
-  .postMessage(channel, null, attachments)
+  .postMessage(channel, message, attachments)
   .then(res => {
-    // `res` contains information about the posted message
+    console.log(chalk.green('Message posted successfully'));
   })
   .catch(console.error);
