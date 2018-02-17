@@ -1,6 +1,6 @@
 {
   "name": "build-status-bot",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "A slack bot that notify a channel with the last version changelog",
   "main": "index.js",
   "repository": "https://github.com/muhammadtarek/build-status-bot",
