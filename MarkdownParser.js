@@ -1,10 +1,18 @@
 const fileStream = require('fs');
 const path = require('path');
-const readline = require('readline');
 
 exports.getLastVersion = filePath => {
   const fullPath = path.join(__dirname, filePath);
-  const lines = require('fs')
+
+  // If file doesn't exist return empty object
+  if (!fileStream.existsSync(fullPath)) {
+    return {
+      version: undefined,
+      versionPoints: [],
+    };
+  }
+
+  const lines = fileStream
     .readFileSync(fullPath, 'utf-8')
     .split('\n')
     .filter(Boolean);
@@ -32,7 +40,7 @@ exports.getLastVersion = filePath => {
   });
 
   return {
-    version: version,
-    versionPoints: versionPoints
+    version,
+    versionPoints,
   };
 };
