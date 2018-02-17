@@ -108,11 +108,11 @@ const attachments = {
         },
         {
           title: 'Source Branch',
-          value: `<${repoUrl}/?version=GB${sourceBranch}|${sourceBranch}>`,
+          value: `<${repoUrl}/?version=GB${sourceBranch}|${sourceBranch.replace('refs/heads/', '')}>`,
           short: true,
         },
         {
-          title: 'Server',
+          title: 'Build is ready for',
           value: `\`${server}\``,
           short: true,
         },
