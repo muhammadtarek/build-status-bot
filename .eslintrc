@@ -1,28 +1,45 @@
 {
   "root": true,
   "env": {
-    "browser": true,
-    "es6": true,
-    "mocha": true
+    "es6": true
   },
-  "extends": ["airbnb"],
+  "extends": ["airbnb", "prettier"],
   "parser": "babel-eslint",
   "parserOptions": {
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true,
-      "jsx": true,
       "modules": true
     },
     "sourceType": "module"
   },
-  "plugins": ["import", "jsx-a11y", "react"],
+  "plugins": ["import", "prettier"],
   "rules": {
-    "indent": ["error", 2],
+    "indent": ["error", 2, { "SwitchCase": 1 }],
     "quotes": ["error", "single"],
     "no-console": "warn",
     "semi": ["error", "always"],
     "radix": "off",
+    "prefer-destructuring": "off",
     "array-callback-return": "off",
-    "consistent-return": "off"
+    "consistent-return": "off",
+    "arrow-parens": ["error", "as-needed"],
+    "no-unused-expressions": "off",
+    "max-len": "off",
+    "class-methods-use-this": "off",
+    "no-mixed-operators": "off",
+    "function-paren-newline": "off",
+
+    "import/no-unresolved": "off",
+
+    "prettier/prettier": [
+      "error",
+      {
+        "useTabs": false,
+        "printWidth": 110,
+        "tabWidth": 2,
+        "singleQuote": true,
+        "trailingComma": "all"
+      }
+    ]
   }
 }
